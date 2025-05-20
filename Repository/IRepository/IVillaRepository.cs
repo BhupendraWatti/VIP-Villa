@@ -3,13 +3,8 @@ using Villa_Services.Models;
 
 namespace Villa_Services.Repository.IRepository
 {
-    public interface IVillaRepository
+    public interface IVillaRepository : IRepository<Villa>
     {
-        Task<Villa> GetAsync(Expression<Func<Villa, bool>> filter = null, bool tracked = true);
-        Task<List<Villa>> GetAllAsync(Expression<Func<Villa, bool>> filter = null);
-        Task CreateAsync(Villa T); 
-        Task  UpdateAsync(Villa T);
-        Task DeleteAsync(Villa T);
-        Task  SaveAsync();
+        Task<Villa> UpdateAsync(Villa T);
     }
 }
