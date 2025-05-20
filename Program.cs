@@ -1,18 +1,25 @@
 using Microsoft.EntityFrameworkCore;
+using Villa_Services;
 using Villa_Services.Data;
-
+using Villa_Services.Repository;
+using Villa_Services.Repository.IRepository;
+using AutoMapper;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddScoped<IVillaRepository, VillaRepository>();
+builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+builder.Services.AddControllers(option => { }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
