@@ -10,6 +10,7 @@ namespace Villa_Services.Data
             
         }
         public DbSet<Villa> Villas { get; set; }
+        public DbSet<VillaNumber> VillaNo { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
