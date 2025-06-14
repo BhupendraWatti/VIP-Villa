@@ -21,7 +21,7 @@ namespace Villa_Services.Controllers
         {
             _VillaN = VillaN;
             _mapper = mapper;
-            _apiRes = new APIResponse();
+            
             _Villa = villa;
         }
         [HttpGet("{id:int}", Name = "GetVillaNoAysnc")]
@@ -30,18 +30,19 @@ namespace Villa_Services.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetVillaNoAysnc(int id)
         {
+            _apiRes = new APIResponse();
             try
             {
                 if (id == 0)
                 {
                     return BadRequest();
                 }
-                VillaNumber villaNo = await _VillaN.GetAsync(u => u.VillaNo == id);
+                VillaNumber villaNo = await _VillaN.GetAsync(u => u.VillaNo == id, includeProperties:"Villa");
                 if (villaNo == null)
                 {
                     return NotFound();
                 }
-                _apiRes.Result = _mapper.Map<VillaNumber>(villaNo);
+                _apiRes.Result = _mapper.Map<VillaNumberDto>(villaNo);
                 _apiRes.StatusCode = HttpStatusCode.OK;
                 return Ok(_apiRes);
             }
@@ -56,10 +57,11 @@ namespace Villa_Services.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetAllVilla()
         {
+            _apiRes = new APIResponse();
             try
             {
-                IEnumerable<VillaNumber> VillaNoList = await _VillaN.GetAllAsync();
-                _apiRes.Result = _mapper.Map<IEnumerable<VillaNumber>>(VillaNoList);
+                IEnumerable<VillaNumber> VillaNoList = await _VillaN.GetAllAsync(includeProperties: "Villa");
+                _apiRes.Result = _mapper.Map<IEnumerable<VillaNumberDto>>(VillaNoList);
                 _apiRes.StatusCode = HttpStatusCode.OK;
                 return Ok(_apiRes);
 
@@ -79,6 +81,7 @@ namespace Villa_Services.Controllers
 
         public async Task<ActionResult<APIResponse>> CreateVillaNo([FromBody]VillaNumberCreate villaNo)
         {
+            _apiRes = new APIResponse();
             try {
                 if (await _VillaN.GetAsync(u => u.VillaNo == villaNo.VillaNo) != null)
                 {
@@ -114,6 +117,7 @@ namespace Villa_Services.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> VillaNoUpdate(int id, [FromBody] VillaNumberUpdate villaUp)
         {
+            _apiRes = new APIResponse();
             try
             {
 
@@ -149,6 +153,7 @@ namespace Villa_Services.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> Deletevillano(int id)
         {
+            _apiRes = new APIResponse();
             try
             {
                 if(id == 0)

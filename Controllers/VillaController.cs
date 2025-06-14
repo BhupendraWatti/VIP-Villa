@@ -18,11 +18,11 @@ namespace Villa_Services.Controllers
         protected APIResponse _response;
         private readonly IVillaRepository _Villadb;
         private readonly IMapper _mapper;
-        public VillaController(IVillaRepository Villadb, IMapper mapper, APIResponse response)
+        public VillaController(IVillaRepository Villadb, IMapper mapper)
         {
             _Villadb = Villadb;
             _mapper = mapper;
-            _response = response;
+            _response = new APIResponse();
         }
 
         [HttpGet("{id:int}", Name ="GetVilla")]
@@ -44,6 +44,7 @@ namespace Villa_Services.Controllers
                 }
                 _response.Result = _mapper.Map<VillaDto>(villa);
                 _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -54,7 +55,7 @@ namespace Villa_Services.Controllers
             return _response;
         }
 
-        [HttpGet(Name ="GetAllAsync")]
+        [HttpGet(Name = "GetAllVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetAllVilla()
         {
@@ -63,6 +64,7 @@ namespace Villa_Services.Controllers
             IEnumerable<Villa> villaList = await _Villadb.GetAllAsync();
             _response.Result = _mapper.Map<IEnumerable<VillaDto>>(villaList);
             _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
             }
             catch (Exception ex)
             {
@@ -96,7 +98,8 @@ namespace Villa_Services.Controllers
 
                 _response.Result = _mapper.Map<VillaDto>(model);
                 _response.StatusCode = HttpStatusCode.Created;
-            return CreatedAtRoute("GetVilla", new { id = model.Id }, _response);
+                _response.IsSuccess = true;
+                return CreatedAtRoute("GetVilla", new { id = model.Id }, _response);
             }
             catch (Exception ex)
             {
@@ -106,7 +109,7 @@ namespace Villa_Services.Controllers
             return _response;
         }
 
-        [HttpDelete("{id:int}", Name ="Deletevilla")]
+        [HttpDelete("{id:int}", Name = "DeleteVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -136,7 +139,7 @@ namespace Villa_Services.Controllers
             return _response;
         }
 
-        [HttpPut("{id:int}", Name ="UpdateVilla")]
+        [HttpPut("{id:int}", Name = "UpdateVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromBody] VillaUpdateDto villaUpdatedto)
@@ -161,7 +164,7 @@ namespace Villa_Services.Controllers
             return _response;
         }
 
-        [HttpPatch("{id:int}", Name ="UpdatePartialVilla")]
+        [HttpPatch("{id:int}", Name = "UpdatePartialVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
