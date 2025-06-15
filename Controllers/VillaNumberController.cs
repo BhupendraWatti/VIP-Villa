@@ -44,6 +44,7 @@ namespace Villa_Services.Controllers
                 }
                 _apiRes.Result = _mapper.Map<VillaNumberDto>(villaNo);
                 _apiRes.StatusCode = HttpStatusCode.OK;
+                _apiRes.IsSuccess = true;
                 return Ok(_apiRes);
             }
             catch (Exception ex) {
@@ -63,6 +64,7 @@ namespace Villa_Services.Controllers
                 IEnumerable<VillaNumber> VillaNoList = await _VillaN.GetAllAsync(includeProperties: "Villa");
                 _apiRes.Result = _mapper.Map<IEnumerable<VillaNumberDto>>(VillaNoList);
                 _apiRes.StatusCode = HttpStatusCode.OK;
+                _apiRes.IsSuccess = true;
                 return Ok(_apiRes);
 
             }
@@ -99,6 +101,7 @@ namespace Villa_Services.Controllers
                 await _VillaN.SaveAsync();
                 _apiRes.Result = _mapper.Map<VillaNumber>(villa);
                 _apiRes.StatusCode = HttpStatusCode.Created;
+                _apiRes.IsSuccess = true;
                 return CreatedAtRoute("GetVilla", new { id = villa.VillaNo }, _apiRes);
 
             }
@@ -168,6 +171,7 @@ namespace Villa_Services.Controllers
                 await _VillaN.DeleteAsync(villa);
                 _apiRes.IsSuccess = true;
                 _apiRes.StatusCode = HttpStatusCode.NoContent;
+                _apiRes.IsSuccess = true;
                 return Ok(_apiRes);
             }
             catch (Exception ex)
